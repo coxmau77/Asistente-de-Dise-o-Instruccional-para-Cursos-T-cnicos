@@ -1,434 +1,496 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Guía de Interacción para Creación de Cursos</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        /* Asegura que el box-sizing sea consistente en todos los elementos */
-        html {
-            box-sizing: border-box;
-        }
-        *, *::before, *::after {
-            box-sizing: inherit;
-        }
+      /* Asegura que el box-sizing sea consistente en todos los elementos */
+      html {
+        box-sizing: border-box;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Un color de fondo suave */
-            color: #1a202c;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Alinea al inicio para permitir scroll */
-            min-height: 100vh;
-            padding: 1.5rem; /* Usar rem para un padding más adaptable */
-        }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f4f8; /* Un color de fondo suave */
+        color: #1a202c;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Alinea al inicio para permitir scroll */
+        min-height: 100vh;
+        padding: 1.5rem; /* Usar rem para un padding más adaptable */
+      }
+      .container {
+        background-color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2.5rem; /* Usar rem para padding */
+        max-width: 900px;
+        width: 100%;
+        margin-top: 1.5rem; /* Margen superior para separación */
+      }
+      .step-card {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 2rem; /* Margen inferior para separación de pasos */
+        gap: 1.25rem; /* Usar rem para el espacio entre elementos */
+        padding: 1.25rem; /* Usar rem para padding */
+        border-radius: 15px;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+      .step-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+      }
+      .step-number {
+        font-size: 3rem; /* Tamaño grande para el número */
+        font-weight: 700;
+        color: #3b82f6; /* Color azul brillante */
+        flex-shrink: 0;
+        line-height: 1;
+      }
+      .step-content h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 0.625rem; /* Usar rem para margen */
+      }
+      .step-content p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        color: #4a5568;
+      }
+      .icon {
+        font-size: 2.5rem; /* Tamaño para los emojis o iconos */
+        margin-right: 0.625rem; /* Usar rem para margen */
+        line-height: 1;
+      }
+      /* Estilo para los detalles (acordeón) - Menos estilo visual aquí, el contenido lo toma */
+      details {
+        border-radius: 8px;
+        margin-top: 1rem;
+      }
+      summary {
+        font-weight: 600;
+        cursor: pointer;
+        color: #2d3748;
+        padding: 0.25rem 0; /* Mantiene un pequeño padding para el texto del summary */
+        outline: none; /* Elimina el contorno al hacer clic */
+        list-style: none; /* Elimina la flecha por defecto */
+      }
+      summary::-webkit-details-marker {
+        display: none; /* Oculta la flecha en WebKit */
+      }
+      summary::before {
+        content: "▶"; /* Flecha personalizada para indicar estado cerrado */
+        margin-right: 0.5rem;
+        display: inline-block;
+        transition: transform 0.2s ease-in-out;
+      }
+      details[open] summary::before {
+        content: "▼"; /* Flecha hacia abajo cuando está abierto */
+        transform: rotate(0deg);
+      }
+      /* Estilo para el contenido dentro de los detalles, ahora es igual a .instruction-example */
+      .details-content,
+      .instruction-example {
+        background-color: #edf2f7; /* Fondo ligeramente diferente para el ejemplo */
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px dashed #a0aec0;
+        margin-top: 0.75rem; /* Espacio entre summary y el contenido del acordeón */
+        font-size: 0.9rem;
+        line-height: 1.4;
+        color: #4a5568; /* Color de texto del contenido */
+        white-space: pre-wrap; /* Mantiene saltos de línea y espacios en blanco */
+        word-wrap: break-word; /* Rompe palabras largas */
+        max-width: 100%; /* Asegura que no sobrepase el ancho */
+        overflow: auto; /* Agrega scroll si el contenido es demasiado largo */
+        position: relative; /* Necesario para el posicionamiento absoluto del botón de copiar */
+        padding-top: 2rem; /* Hace espacio para el botón de copiar */
+      }
+
+      /* Estilos del botón de copiar */
+      .copy-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: #cbd5e0; /* Gris claro */
+        color: #4a5568;
+        border: none;
+        padding: 0.4rem 0.6rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        z-index: 10;
+      }
+      .copy-button:hover {
+        background-color: #a0aec0; /* Gris un poco más oscuro */
+        transform: translateY(-1px);
+      }
+      .copy-button:active {
+        background-color: #718096; /* Gris aún más oscuro al hacer clic */
+        transform: translateY(0);
+      }
+      .copy-button::before {
+        content: "📋"; /* Icono de copiar */
+        font-size: 1rem;
+        margin-right: 0.2rem;
+      }
+      /* Estilos del mensaje de feedback */
+      .copy-feedback {
+        position: absolute;
+        top: 0.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4caf50; /* Verde para éxito */
+        color: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+        z-index: 11;
+      }
+
+      /* Media query para pantallas pequeñas (móviles) */
+      @media (max-width: 640px) {
         .container {
-            background-color: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 2.5rem; /* Usar rem para padding */
-            max-width: 900px;
-            width: 100%;
-            margin-top: 1.5rem; /* Margen superior para separación */
+          padding: 1.5rem; /* Reducir padding en móviles */
         }
         .step-card {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 2rem; /* Margen inferior para separación de pasos */
-            gap: 1.25rem; /* Usar rem para el espacio entre elementos */
-            padding: 1.25rem; /* Usar rem para padding */
-            border-radius: 15px;
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-        .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 0.75rem; /* Reducir el gap en móviles */
+          margin-bottom: 1.5rem;
         }
         .step-number {
-            font-size: 3rem; /* Tamaño grande para el número */
-            font-weight: 700;
-            color: #3b82f6; /* Color azul brillante */
-            flex-shrink: 0;
-            line-height: 1;
+          font-size: 2.5rem;
         }
         .step-content h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #2d3748;
-            margin-bottom: 0.625rem; /* Usar rem para margen */
+          font-size: 1.5rem;
         }
         .step-content p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #4a5568;
+          font-size: 1rem;
         }
         .icon {
-            font-size: 2.5rem; /* Tamaño para los emojis o iconos */
-            margin-right: 0.625rem; /* Usar rem para margen */
-            line-height: 1;
+          font-size: 2rem;
+          margin-right: 0; /* Eliminar margen derecho del icono en móvil si está en columna */
+          margin-bottom: 0.5rem; /* Añadir margen inferior si es necesario */
         }
-        /* Estilo para los detalles (acordeón) - Menos estilo visual aquí, el contenido lo toma */
-        details {
-            border-radius: 8px;
-            margin-top: 1rem;
+        .step-content ul {
+          padding-left: 1.25rem; /* Ajustar padding de lista en móvil */
         }
-        summary {
-            font-weight: 600;
-            cursor: pointer;
-            color: #2d3748;
-            padding: 0.25rem 0; /* Mantiene un pequeño padding para el texto del summary */
-            outline: none; /* Elimina el contorno al hacer clic */
-            list-style: none; /* Elimina la flecha por defecto */
+        .details-content,
+        .instruction-example {
+          font-size: 0.85rem; /* Tamaño de fuente más pequeño en móvil */
+          padding-top: 2.5rem; /* Más espacio para el botón en móvil */
         }
-        summary::-webkit-details-marker {
-            display: none; /* Oculta la flecha en WebKit */
-        }
-        summary::before {
-            content: '▶'; /* Flecha personalizada para indicar estado cerrado */
-            margin-right: 0.5rem;
-            display: inline-block;
-            transition: transform 0.2s ease-in-out;
-        }
-        details[open] summary::before {
-            content: '▼'; /* Flecha hacia abajo cuando está abierto */
-            transform: rotate(0deg);
-        }
-        /* Estilo para el contenido dentro de los detalles, ahora es igual a .instruction-example */
-        .details-content, .instruction-example {
-            background-color: #edf2f7; /* Fondo ligeramente diferente para el ejemplo */
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px dashed #a0aec0;
-            margin-top: 0.75rem; /* Espacio entre summary y el contenido del acordeón */
-            font-size: 0.9rem;
-            line-height: 1.4;
-            color: #4a5568; /* Color de texto del contenido */
-            white-space: pre-wrap; /* Mantiene saltos de línea y espacios en blanco */
-            word-wrap: break-word; /* Rompe palabras largas */
-            max-width: 100%; /* Asegura que no sobrepase el ancho */
-            overflow: auto; /* Agrega scroll si el contenido es demasiado largo */
-            position: relative; /* Necesario para el posicionamiento absoluto del botón de copiar */
-            padding-top: 2rem; /* Hace espacio para el botón de copiar */
-        }
-
-        /* Estilos del botón de copiar */
         .copy-button {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background-color: #cbd5e0; /* Gris claro */
-            color: #4a5568;
-            border: none;
-            padding: 0.4rem 0.6rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            z-index: 10;
-        }
-        .copy-button:hover {
-            background-color: #a0aec0; /* Gris un poco más oscuro */
-            transform: translateY(-1px);
-        }
-        .copy-button:active {
-            background-color: #718096; /* Gris aún más oscuro al hacer clic */
-            transform: translateY(0);
+          top: 0.75rem; /* Ajustar posición para móvil */
+          right: 0.75rem;
+          padding: 0.3rem 0.5rem;
+          font-size: 0.75rem;
+          gap: 0.2rem;
         }
         .copy-button::before {
-            content: '📋'; /* Icono de copiar */
-            font-size: 1rem;
-            margin-right: 0.2rem;
+          font-size: 0.9rem;
         }
-        /* Estilos del mensaje de feedback */
         .copy-feedback {
-            position: absolute;
-            top: 0.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #4CAF50; /* Verde para éxito */
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-            z-index: 11;
+          top: 0.75rem;
+          padding: 0.3rem 0.6rem;
+          font-size: 0.75rem;
         }
-
-        /* Media query para pantallas pequeñas (móviles) */
-        @media (max-width: 640px) {
-            .container {
-                padding: 1.5rem; /* Reducir padding en móviles */
-            }
-            .step-card {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                gap: 0.75rem; /* Reducir el gap en móviles */
-                margin-bottom: 1.5rem;
-            }
-            .step-number {
-                font-size: 2.5rem;
-            }
-            .step-content h2 {
-                font-size: 1.5rem;
-            }
-            .step-content p {
-                font-size: 1rem;
-            }
-            .icon {
-                font-size: 2rem;
-                margin-right: 0; /* Eliminar margen derecho del icono en móvil si está en columna */
-                margin-bottom: 0.5rem; /* Añadir margen inferior si es necesario */
-            }
-            .step-content ul {
-                padding-left: 1.25rem; /* Ajustar padding de lista en móvil */
-            }
-            .details-content, .instruction-example {
-                font-size: 0.85rem; /* Tamaño de fuente más pequeño en móvil */
-                padding-top: 2.5rem; /* Más espacio para el botón en móvil */
-            }
-            .copy-button {
-                top: 0.75rem; /* Ajustar posición para móvil */
-                right: 0.75rem;
-                padding: 0.3rem 0.5rem;
-                font-size: 0.75rem;
-                gap: 0.2rem;
-            }
-            .copy-button::before {
-                font-size: 0.9rem;
-            }
-            .copy-feedback {
-                top: 0.75rem;
-                padding: 0.3rem 0.6rem;
-                font-size: 0.75rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1 class="text-4xl font-bold text-center mb-10 text-gray-800">🚀 Tu Guía Paso a Paso para Crear Cursos</h1>
-        <p class="text-center text-lg text-gray-600 mb-12">
-            Sigue estos sencillos pasos para interactuar con el Asistente de Diseño Instruccional y generar tus cursos modulares de manera eficiente.
-        </p>
+      <h1 class="text-4xl font-bold text-center mb-10 text-gray-800">
+        🚀 Tu Guía Paso a Paso para Crear Cursos
+      </h1>
+      <p class="text-center text-lg text-gray-600 mb-12">
+        Sigue estos sencillos pasos para interactuar con el Asistente de Diseño
+        Instruccional y generar tus cursos modulares de manera eficiente.
+      </p>
 
-        <!-- Paso 1 -->
-        <div class="step-card">
-            <div class="step-number">1</div>
-            <div class="step-content">
-                <h2 class="flex items-center"><span class="icon">📝</span> Establecer o Actualizar el Prompt de Diseño Instruccional</h2>
-                <p class="mb-2">Este es el paso de "configuración". <strong>Solo necesitas hacerlo una vez por cada nueva conversación</strong>, o cuando quieras modificar las reglas generales, la estructura o el formato del curso (ej., añadir/cambiar la regla de los iconos).</p>
-                <p><strong>Lo que tú me envías:</strong> El texto completo de tu <em>prompt</em> de diseño instruccional, incluyendo el contexto, las tareas y la estructura de salida. Recuerda que este es el "prompt maestro" que memorizaré para esa sesión.</p>
-                <p><strong>Lo que yo hago:</strong> Lo guardo y te confirmo que lo he comprendido y que lo usaré de ahora en adelante para esa conversación.</p>
+      <!-- Paso 1 -->
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h2 class="flex items-center">
+            <span class="icon">📝</span> Establecer o Actualizar el Prompt de
+            Diseño Instruccional
+          </h2>
+          <p class="mb-2">
+            Este es el paso de "configuración".
+            <strong
+              >Solo necesitas hacerlo una vez por cada nueva
+              conversación</strong
+            >, o cuando quieras modificar las reglas generales, la estructura o
+            el formato del curso (ej., añadir/cambiar la regla de los iconos).
+          </p>
+          <p>
+            <strong>Lo que tú me envías:</strong> El texto completo de tu
+            <em>prompt</em> de diseño instruccional, incluyendo el contexto, las
+            tareas y la estructura de salida. Recuerda que este es el "prompt
+            maestro" que memorizaré para esa sesión.
+          </p>
+          <p>
+            <strong>Lo que yo hago:</strong> Lo guardo y te confirmo que lo he
+            comprendido y que lo usaré de ahora en adelante para esa
+            conversación.
+          </p>
 
-                <details>
-                    <summary>Ver Ejemplo de Prompt Completo</summary>
-                    <div class="details-content" id="fullPromptExample">
-                        <!-- Contenido del prompt -->
-                        Asistente de Diseño Instruccional para Cursos Técnicos
+          <details>
+            <summary>Ver Ejemplo de Prompt Completo</summary>
+            <div class="details-content" id="fullPromptExample">
+              <!-- Contenido del prompt -->
+              Asistente de Diseño Instruccional para Cursos Técnicos Contexto
+              del Rol: Actúa como un profesor experto en enseñanza técnica, con
+              sólida formación en didáctica, diseño instruccional y experiencia
+              en tecnologías web. Tu objetivo principal es transformar contenido
+              bruto (transcripciones en texto plano, en español o inglés)
+              —proveniente de clases, tutoriales, charlas o videos de YouTube—
+              en material didáctico estructurado, comprensible y efectivo. Tu
+              Tarea Principal: Tu responsabilidad es convertir la transcripción
+              proporcionada en un curso modular organizado en clases de 45
+              minutos. Cada clase debe incluir: - Contenido teórico comprensible
+              - Observaciones y comentarios del autor o instructor original -
+              Ejemplos prácticos (fragmentos de código, analogías u otros
+              recursos aplicados) - Estructura pedagógica clara y coherente La
+              cantidad total de clases se define a partir del análisis y
+              segmentación del contenido. --- # [ICON:] Título global del plan
+              de estudio. Estructura Esperada del Contenido del Curso ## [ICON:]
+              Módulo X: [Título del Módulo] Fuente original (opcional): [Título
+              del Video o Fuente](URL) Introducción al módulo: Breve explicación
+              del tema general del módulo, su relevancia actual y lo que el
+              estudiante logrará al final del mismo. --- ### Capítulo X: [Título
+              del Capítulo] Tiempo de referencia inicial: 00:00 Descripción
+              general del capítulo: Un resumen claro del tema principal del
+              capítulo. --- Reglas de Formato Específicas: - **Inclusión de
+              Iconos:** * **Para títulos de Módulos (##), Capítulos (###) y
+              Subtemas (X.X):** Siempre agrega un icono relevante al inicio del
+              título. Yo seleccionaré el icono más apropiado (emoji o carácter
+              Unicode) según el contexto del título. * Ejemplo: `## 💡 Módulo 1:
+              Fundamentos` * Ejemplo: `### 🎯 Capítulo 2: Aplicaciones
+              Prácticas` * Ejemplo: `✅ 3.1 Conceptos Clave` * **Para secciones
+              específicas (Observaciones del autor, Documentación oficial,
+              Justificación pedagógica):** Agrega un icono relevante al inicio
+              de la línea del título de la sección. Yo seleccionaré el icono más
+              apropiado (emoji o carácter Unicode). * Ejemplo: `🗣️ Observaciones
+              del autor (comentarios del video):` * Ejemplo: `🔗 Documentación
+              oficial o fuentes recomendadas:` * Ejemplo: `🧠 Justificación
+              pedagógica:` --- [ICON:] X.X [Nombre del Subtema] Tiempo de
+              referencia: 00:00 Contenido teórico completo: Transcribe, resume o
+              explica de forma clara el contenido técnico presentado en la
+              transcripción (puede incluir código, definiciones, funciones,
+              ejemplos, etc.). [ICON:] Observaciones del autor (comentarios del
+              video): Incluye reflexiones, opiniones, recomendaciones o
+              aclaraciones hechas por el presentador. Marca claramente esta
+              sección para distinguir el contenido objetivo del subjetivo. ---
+              [ICON:] Documentación oficial o fuentes recomendadas: - Nombre del
+              recurso (URL) [ICON:] Justificación pedagógica: Explica por qué se
+              enseña este tema en ese momento, qué nivel cognitivo se desarrolla
+              (comprensión, análisis, aplicación, etc.) y cómo se vincula con
+              temas y conceptos previos o futuros. --- Planificación de Clases
+              (por clase de 45 minutos) ## Clase [n°]: [Título de la Clase] -
+              Duración estimada: 45 minutos - Objetivo de aprendizaje: Qué se
+              espera que el estudiante comprenda o pueda aplicar al finalizar la
+              clase. ### Contenidos abordados (con tiempos de la transcripción):
+              - 00:00 Introducción al tema - 03:45 Concepto clave 1 - 08:00
+              Aplicación práctica o ejemplo 1 - ... (y así sucesivamente)
+              Actividad práctica sugerida: (opcional/requerida) Pequeña práctica
+              guiada o proyecto corto para aplicar lo aprendido. Documentación
+              de apoyo: Recursos oficiales o ampliación sugerida para el estudio
+              independiente. Cuestionario de repaso: 1. Pregunta 1 2. Pregunta 2
+              3. Pregunta 3 --- Especificaciones Adicionales: - Idioma de
+              entrada: Español o Inglés - Idioma de salida: Siempre Español -
+              Formato del archivo de entrada: .txt - Opcional: Puedes incluir
+              una URL de YouTube junto con la transcripción dentro del
+              documento. --- Resumen del Curso (al finalizar el análisis): Al
+              completar el curso, se proporcionará un resumen que incluirá: -
+              Contenido General del Curso: Una lista concisa de los principales
+              temas y características aprendidas. - Tiempo Estimado de Clases:
+              Duración total aproximada del curso en horas/minutos, basada en
+              las clases de 45 minutos planificadas. - Tiempo Sugerido de
+              Práctica, Estudio e Implementación: Una recomendación de tiempo
+              adicional para que el estudiante consolide el conocimiento a
+              través de la práctica, el estudio personal y la implementación de
+              los conceptos en proyectos. De esta forma, se fomenta el
+              desarrollo de su autonomía, la cual muchos profesionales
+              desarrollan y experimentan en su día a día.
 
-                        Contexto del Rol:
-                        Actúa como un profesor experto en enseñanza técnica, con amplia experiencia en didáctica, diseño instruccional y formación en tecnologías web. Tu objetivo principal es transformar contenido bruto (transcripciones en texto plano, en español o inglés) —proveniente de clases, tutoriales, charlas o videos de YouTube— en material didáctico estructurado, comprensible y efectivo.
-
-                        Tu Tarea Principal:
-                        Tu responsabilidad es convertir la transcripción proporcionada en un curso modular organizado en clases de 45 minutos.
-
-                        Cada clase debe incluir:
-
-                        - Contenido teórico comprensible
-                        - Observaciones y comentarios del autor o instructor original
-                        - Ejemplos prácticos (fragmentos de código, analogías u otros recursos aplicados)
-                        - Estructura pedagógica clara y coherente
-
-                        La cantidad total de clases se define a partir del análisis y segmentación del contenido.
-
-                        ---
-                        # [ICON:] Título global del plan de estudio.
-
-                        Estructura Esperada del Contenido del Curso
-
-                        ## [ICON:] Módulo X: [Título del Módulo]
-                        Fuente original (opcional): [Título del Video o Fuente](URL)
-
-                        Introducción al módulo:
-                        Breve explicación del tema general del módulo, su relevancia actual y lo que el estudiante logrará al final del mismo.
-
-                        ---
-
-                        ### Capítulo X: [Título del Capítulo]
-                        Tiempo de referencia inicial: 00:00
-                        Descripción general del capítulo:
-                        Un resumen claro del tema principal del capítulo.
-
-                        ---
-
-                        [ICON:] X.X [Nombre del Subtema]
-                        Tiempo de referencia: 00:00
-                        Contenido teórico completo:
-                        Transcribe, resume o explica de forma clara el contenido técnico presentado en la transcripción (puede incluir código, definiciones, funciones, ejemplos, etc.).
-
-                        [ICON:] Observaciones del autor (comentarios del video):
-                        Incluye reflexiones, opiniones, recomendaciones o aclaraciones hechas por el presentador. Marca claramente esta sección para distinguir el contenido objetivo del subjetivo.
-
-                        ---
-
-                        [ICON:] Documentación oficial o fuentes recomendadas:
-                        - Nombre del recurso (URL)
-
-                        [ICON:] Justificación pedagógica:
-                        Explica por qué se enseña este tema en ese momento, qué nivel cognitivo se desarrolla (comprensión, análisis, aplicación, etc.) y cómo se vincula con temas y conceptos previos o futuros.
-
-                        ---
-
-                        Planificación de Clases (por clase de 45 minutos)
-
-                        ## Clase [n°]: [Título de la Clase]
-                        - Duración estimada: 45 minutos
-                        - Objetivo de aprendizaje: Qué se espera que el estudiante comprenda o pueda aplicar al finalizar la clase.
-                        ### Contenidos abordados (con tiempos de la transcripción):
-                        - 00:00 Introducción al tema
-                        - 03:45 Concepto clave 1
-                        - 08:00 Aplicación práctica o ejemplo 1
-                        - ... (y así sucesivamente)
-                        Actividad práctica sugerida: (opcional/requerida) Pequeña práctica guiada o proyecto corto para aplicar lo aprendido.
-                        Documentación de apoyo: Recursos oficiales o ampliación sugerida para el estudio independiente.
-                        Cuestionario de repaso:
-                        1. Pregunta 1
-                        2. Pregunta 2
-                        3. Pregunta 3
-
-                        ---
-
-                        Especificaciones Adicionales:
-
-                        - Idioma de entrada: Español o Inglés
-                        - Idioma de salida: Siempre Español
-                        - Formato del archivo de entrada: .txt
-                        - Opcional: Puedes incluir una URL de YouTube junto con la transcripción dentro del documento.
-
-                        ---
-
-                        Resumen del Curso (al finalizar el análisis):
-
-                        Al completar el curso, se proporcionará un resumen que incluirá:
-
-                        - Contenido General del Curso: Una lista concisa de los principales temas y características aprendidas.
-                        - Tiempo Estimado de Clases: Duración total aproximada del curso en horas/minutos, basada en las clases de 45 minutos planificadas.
-                        - Tiempo Sugerido de Práctica, Estudio e Implementación: Una recomendación de tiempo adicional para que el estudiante consolide el conocimiento a través de la práctica, el estudio personal y la implementación de los conceptos en proyectos. De esta forma, se fomenta el desarrollo de su autonomía, la cual muchos profesionales desarrollan y experimentan en su día a día.
-
-                        ---
-
-                        Instrucción para iniciar el proceso:
-
-                        Utiliza la transcripción adjunta para aplicar la estructura de curso modular definida arriba. La cantidad de clases se determinará según el análisis del contenido. Agrega ejemplos prácticos (analogías y/o fragmentos de código) para dejar claros los conceptos.
-
-                        <div class="copy-feedback" id="feedback-fullPromptExample"></div>
-                        <button class="copy-button" data-target-id="fullPromptExample">Copiar</button>
-                    </div>
-                </details>
+              <div class="copy-feedback" id="feedback-fullPromptExample"></div>
+              <button class="copy-button" data-target-id="fullPromptExample">
+                Copiar
+              </button>
             </div>
+          </details>
         </div>
+      </div>
 
-        <!-- Paso 2 -->
-        <div class="step-card">
-            <div class="step-number">2</div>
-            <div class="step-content">
-                <h2 class="flex items-center"><span class="icon">✅</span> Mi Confirmación de Listo</h2>
-                <p class="mb-2">Este paso es mi señal para ti de que estoy preparado y esperando el documento para comenzar una nueva tarea de curso.</p>
-                <p><strong>Lo que tú esperas de mí:</strong> Un mensaje claro indicando que estoy listo y esperando tu próximo envío.</p>
-                <p><strong>Mi mensaje (ejemplo):</strong> "Estoy listo. Adjunta el documento y envíame las instrucciones para iniciar el proceso."</p>
+      <!-- Paso 2 -->
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h2 class="flex items-center">
+            <span class="icon">✅</span> Mi Confirmación de Listo
+          </h2>
+          <p class="mb-2">
+            Este paso es mi señal para ti de que estoy preparado y esperando el
+            documento para comenzar una nueva tarea de curso.
+          </p>
+          <p>
+            <strong>Lo que tú esperas de mí:</strong> Un mensaje claro indicando
+            que estoy listo y esperando tu próximo envío.
+          </p>
+          <p>
+            <strong>Mi mensaje (ejemplo):</strong> "Estoy listo. Adjunta el
+            documento y envíame las instrucciones para iniciar el proceso."
+          </p>
+        </div>
+      </div>
+
+      <!-- Paso 3 -->
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h2 class="flex items-center">
+            <span class="icon">📤</span> Envío del Documento y la Instrucción de
+            Ejecución
+          </h2>
+          <p class="mb-2">
+            Este es el paso que realizarás cada vez que quieras que comience a
+            trabajar en una nueva transcripción para un curso.
+          </p>
+          <p>
+            <strong
+              >Lo que tú me envías (en el mismo mensaje o dos
+              consecutivos):</strong
+            >
+          </p>
+          <ul class="list-disc list-inside ml-5 text-gray-700">
+            <li>
+              El <strong>documento adjunto:</strong> La transcripción en formato
+              <code>.txt</code> que deseas convertir.
+            </li>
+            <li>
+              Las <strong>instrucciones específicas de ejecución:</strong> Una
+              indicación concisa para que aplique el <em>prompt</em> principal
+              al documento adjunto.
+            </li>
+          </ul>
+          <p class="mt-2">
+            <strong
+              >Ejemplo de las Instrucciones de Ejecución que me
+              enviarías:</strong
+            >
+          </p>
+          <details>
+            <summary>Ver Ejemplo de Instrucciones</summary>
+            <div class="instruction-example" id="instructionsExample">
+              <!-- Contenido de las instrucciones de ejemplo -->
+              Analiza y estructura esta transcripción para convertirla en un
+              curso modular con clases de 45 minutos, incluyendo contenido
+              teórico, observaciones del autor y estructura pedagógica completa.
+              La cantidad de clases se determina según el análisis del
+              contenido. Agrega ejemplos prácticos de ejemplo, pueden ser
+              analogías y/o fragmentos de código para dejar claro el concepto.
+              Utiliza la transcripción adjunta para aplicar esta estructura
+              modular. La cantidad de clases resultantes dependerá del análisis
+              detallado del contenido.
+
+              <div
+                class="copy-feedback"
+                id="feedback-instructionsExample"
+              ></div>
+              <button class="copy-button" data-target-id="instructionsExample">
+                Copiar
+              </button>
             </div>
+          </details>
+          <p class="mt-2">
+            <strong>Lo que yo hago:</strong> Comenzaré a procesar el curso
+            basándome en el documento y estas instrucciones.
+          </p>
         </div>
+      </div>
 
-        <!-- Paso 3 -->
-        <div class="step-card">
-            <div class="step-number">3</div>
-            <div class="step-content">
-                <h2 class="flex items-center"><span class="icon">📤</span> Envío del Documento y la Instrucción de Ejecución</h2>
-                <p class="mb-2">Este es el paso que realizarás cada vez que quieras que comience a trabajar en una nueva transcripción para un curso.</p>
-                <p><strong>Lo que tú me envías (en el mismo mensaje o dos consecutivos):</strong></p>
-                <ul class="list-disc list-inside ml-5 text-gray-700">
-                    <li>El <strong>documento adjunto:</strong> La transcripción en formato <code>.txt</code> que deseas convertir.</li>
-                    <li>Las <strong>instrucciones específicas de ejecución:</strong> Una indicación concisa para que aplique el <em>prompt</em> principal al documento adjunto.</li>
-                </ul>
-                <p class="mt-2"><strong>Ejemplo de las Instrucciones de Ejecución que me enviarías:</strong></p>
-                <details>
-                    <summary>Ver Ejemplo de Instrucciones</summary>
-                    <div class="instruction-example" id="instructionsExample">
-                        <!-- Contenido de las instrucciones de ejemplo -->
-Analiza y estructura esta transcripción para convertirla en un curso modular con clases de 45 minutos, incluyendo contenido teórico, observaciones del autor y estructura pedagógica completa. La cantidad de clases se determina según el análisis del contenido. Agrega ejemplos prácticos de ejemplo, pueden ser analogías y/o fragmentos de código para dejar claro el concepto.
-
-Utiliza la transcripción adjunta para aplicar esta estructura modular. La cantidad de clases resultantes dependerá del análisis detallado del contenido.
-
-                        <div class="copy-feedback" id="feedback-instructionsExample"></div>
-                        <button class="copy-button" data-target-id="instructionsExample">Copiar</button>
-                    </div>
-                </details>
-                <p class="mt-2"><strong>Lo que yo hago:</strong> Comenzaré a procesar el curso basándome en el documento y estas instrucciones.</p>
-            </div>
-        </div>
-
-        <p class="text-center text-gray-600 mt-10 text-lg">
-            ¡Y listo! Siguiendo estos pasos, optimizaremos nuestra colaboración para que puedas obtener tus cursos de manera eficiente.
-        </p>
+      <p class="text-center text-gray-600 mt-10 text-lg">
+        ¡Y listo! Siguiendo estos pasos, optimizaremos nuestra colaboración para
+        que puedas obtener tus cursos de manera eficiente.
+      </p>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.copy-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetId = button.dataset.targetId;
-                    const targetElement = document.getElementById(targetId);
-                    const feedbackElement = document.getElementById(`feedback-${targetId}`);
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".copy-button").forEach((button) => {
+          button.addEventListener("click", () => {
+            const targetId = button.dataset.targetId;
+            const targetElement = document.getElementById(targetId);
+            const feedbackElement = document.getElementById(
+              `feedback-${targetId}`
+            );
 
-                    if (targetElement) {
-                        // Crear un elemento textarea temporal para copiar el texto
-                        const textarea = document.createElement('textarea');
-                        // Excluir el contenido del botón de copiar y el feedback del texto a copiar
-                        let textToCopy = targetElement.cloneNode(true);
-                        textToCopy.querySelectorAll('.copy-button, .copy-feedback').forEach(el => el.remove());
-                        textarea.value = textToCopy.textContent.trim();
+            if (targetElement) {
+              // Crear un elemento textarea temporal para copiar el texto
+              const textarea = document.createElement("textarea");
+              // Excluir el contenido del botón de copiar y el feedback del texto a copiar
+              let textToCopy = targetElement.cloneNode(true);
+              textToCopy
+                .querySelectorAll(".copy-button, .copy-feedback")
+                .forEach((el) => el.remove());
+              textarea.value = textToCopy.textContent.trim();
 
-                        document.body.appendChild(textarea);
-                        textarea.select();
-                        try {
-                            document.execCommand('copy');
-                            if (feedbackElement) {
-                                feedbackElement.textContent = '¡Copiado!';
-                                feedbackElement.style.opacity = '1';
-                                setTimeout(() => {
-                                    feedbackElement.style.opacity = '0';
-                                    feedbackElement.textContent = '';
-                                }, 2000);
-                            }
-                        } catch (err) {
-                            console.error('Error al copiar el texto:', err);
-                            if (feedbackElement) {
-                                feedbackElement.textContent = 'Error al copiar';
-                                feedbackElement.style.opacity = '1';
-                                feedbackElement.style.color = 'red';
-                                setTimeout(() => {
-                                    feedbackElement.style.opacity = '0';
-                                    feedbackElement.textContent = '';
-                                    feedbackElement.style.color = '';
-                                }, 2000);
-                            }
-                        } finally {
-                            document.body.removeChild(textarea);
-                        }
-                    }
-                });
-            });
+              document.body.appendChild(textarea);
+              textarea.select();
+              try {
+                document.execCommand("copy");
+                if (feedbackElement) {
+                  feedbackElement.textContent = "¡Copiado!";
+                  feedbackElement.style.opacity = "1";
+                  setTimeout(() => {
+                    feedbackElement.style.opacity = "0";
+                    feedbackElement.textContent = "";
+                  }, 2000);
+                }
+              } catch (err) {
+                console.error("Error al copiar el texto:", err);
+                if (feedbackElement) {
+                  feedbackElement.textContent = "Error al copiar";
+                  feedbackElement.style.opacity = "1";
+                  feedbackElement.style.color = "red";
+                  setTimeout(() => {
+                    feedbackElement.style.opacity = "0";
+                    feedbackElement.textContent = "";
+                    feedbackElement.style.color = "";
+                  }, 2000);
+                }
+              } finally {
+                document.body.removeChild(textarea);
+              }
+            }
+          });
         });
+      });
     </script>
-</body>
+  </body>
 </html>
