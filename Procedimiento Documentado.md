@@ -84,8 +84,7 @@ Para comenzar, por favor, **proporciona el material que deseas transformar en cu
 1.  **Una URL de YouTube:** Un enlace directo al video.
 2.  **El contenido de un Archivo PDF:** El texto completo del documento.
 3.  **El contenido de un Archivo TXT:** El texto plano del documento.
-
-(Si tienes una transcripción de un video de YouTube, puedes incluir la URL junto con el texto en el mismo mensaje para una mejor referencia.)
+4. o puedes adjuntar un documento en el chat.
 
 **Una vez que hayas pegado el contenido, simplemente presiona Enter.**
 
@@ -109,7 +108,7 @@ Una vez que reciba tu material, mi proceso será el siguiente:
 
 ```markdown
 # [ICON:] Título global del plan de estudio.
-Fuente original (opcional): [Título del Video o Fuente](URL)
+Fuente original: [Título del Video o Fuente](URL)
 
 ---
 ### 📊 Detalles del Curso:
