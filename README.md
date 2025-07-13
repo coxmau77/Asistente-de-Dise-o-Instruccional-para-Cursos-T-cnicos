@@ -1,4 +1,6 @@
-# 📚 README: Asistente de Diseño Instruccional para Cursos Técnicos
+# 📚 [README: Asistente de Diseño Instruccional para Cursos Técnicos](https://coxmau77.github.io/Asistente-de-Dise-o-Instruccional-para-Cursos-T-cnicos/)
+
+- [Seguimiento en GitHub](https://github.com/coxmau77/Asistente-de-Dise-o-Instruccional-para-Cursos-T-cnicos)
 
 ## 💡 ¿Qué es este Asistente?
 
